@@ -39,6 +39,11 @@ class LearningAgent(Agent):
         # Update epsilon using a decay function of your choice
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
+        self.epsilon = self.epsilon - 0.05
+
+        if testing == False:
+            self.epsilon = 0
+            self.alpha = 0
 
         return None
 
@@ -60,7 +65,7 @@ class LearningAgent(Agent):
         #   If it is not, create a dictionary in the Q-table for the current 'state'
         #   For each action, set the Q-value for the state-action pair to 0
         
-        state = None
+        state = 'light', 'left', 'right', 'oncoming', 'deadline'
 
         return state
 
@@ -109,6 +114,8 @@ class LearningAgent(Agent):
         #   Otherwise, choose an action with the highest Q-value for the current state
         if self.learning == False:
             action = random.choice(self.valid_actions)
+        else:
+            action = self.Q[state]
  
         return action
 
@@ -123,6 +130,8 @@ class LearningAgent(Agent):
         ###########
         # When learning, implement the value iteration update rule
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
+        if self.learning == True:
+            pass
 
         return
 
@@ -151,9 +160,7 @@ def run():
     #   verbose     - set to True to display additional output from the simulation
     #   num_dummies - discrete number of dummy agents in the environment, default is 100
     #   grid_size   - discrete number of intersections (columns, rows), default is (8, 6)
-    env = Environment(
-        num_dummies=10,
-        grid_size = (8, 8))
+    env = Environment(verbose=True)
     
     ##############
     # Create the driving agent
@@ -161,7 +168,7 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent)
+    agent = env.create_agent(LearningAgent, learning=True)
     
     ##############
     # Follow the driving agent
