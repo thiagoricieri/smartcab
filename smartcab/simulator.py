@@ -230,15 +230,15 @@ class Simulator(object):
             if a.learning:
                 f = self.table_file
                 
-                f.write("/-----------------------------------------\n")
-                f.write("| State-action rewards from Q-Learning\n")
-                f.write("\-----------------------------------------\n\n")
+                f.write(b'/-----------------------------------------\n')
+                f.write(b'| State-action rewards from Q-Learning\n')
+                f.write(b'\-----------------------------------------\n\n')
 
                 for state in a.Q:
-                    f.write("{}\n".format(state))
+                    f.write(str.encode("{}\n".format(state)))
                     for action, reward in a.Q[state].items():
-                        f.write(" -- {} : {:.2f}\n".format(action, reward))
-                    f.write("\n")  
+                        f.write(str.encode(' -- {} : {:.2f}\n'.format(action, reward)))
+                    f.write(b'\n')  
                 self.table_file.close()
 
             self.log_file.close()

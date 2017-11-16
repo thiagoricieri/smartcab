@@ -263,7 +263,7 @@ class Environment(object):
     def act(self, agent, action):
         """ Consider an action and perform the action if it is legal.
             Receive a reward for the agent based on traffic laws. """
-
+            
         assert agent in self.agent_states, "Unknown agent!"
         assert action in self.valid_actions, "Invalid action!"
 

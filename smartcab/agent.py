@@ -65,7 +65,17 @@ class LearningAgent(Agent):
         #   If it is not, create a dictionary in the Q-table for the current 'state'
         #   For each action, set the Q-value for the state-action pair to 0
         
-        state = 'light', 'left', 'right', 'oncoming', 'deadline'
+        state = (
+            waypoint, 
+            inputs['light'],
+            inputs['left'],
+            inputs['right'],
+            inputs['oncoming']
+        )
+
+        if self.learning:
+            if not state in self.Q:
+                self.Q[state] = dict((a, 0) for a in self.valid_actions)
 
         return state
 
@@ -115,7 +125,14 @@ class LearningAgent(Agent):
         if self.learning == False:
             action = random.choice(self.valid_actions)
         else:
-            action = self.Q[state]
+            prob = random.uniform(0, 1)
+            if prob > self.epsilon:
+                action = random.choice(self.valid_actions)
+            else:
+                qval = -9999999
+                for a, q in self.Q[state]:
+                    if max(qval, q) == q:
+                        action = a
  
         return action
 
