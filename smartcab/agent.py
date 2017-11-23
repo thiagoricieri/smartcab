@@ -133,7 +133,7 @@ class LearningAgent(Agent):
             action = random.choice(self.valid_actions)
         else:
             prob = random.uniform(0, 1)
-            if prob > self.epsilon:
+            if prob < self.epsilon:
                 action = random.choice(self.valid_actions)
             else:
                 action = self.get_maxQ(state)
