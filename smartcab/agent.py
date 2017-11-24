@@ -44,7 +44,7 @@ class LearningAgent(Agent):
             self.epsilon = 0
             self.alpha = 0
         else:
-            self.epsilon = self.epsilon * (1 - self.alpha)
+            self.epsilon = self.epsilon - 0.05
 
         return None
 
@@ -89,14 +89,14 @@ class LearningAgent(Agent):
         ###########
         # Calculate the maximum Q-value of all actions for a given state
         maxQ = -9999999
-        action = None 
+        actions = [] 
 
         for a, q in self.Q[state].items():
-            if max(maxQ, q) == q:
-                action = a
+            if max(maxQ, q) == q or maxQ == q:
+                actions.append(a)
                 maxQ = q
 
-        return action
+        return actions
 
 
     def createQ(self, state):
@@ -136,7 +136,8 @@ class LearningAgent(Agent):
             if prob < self.epsilon:
                 action = random.choice(self.valid_actions)
             else:
-                action = self.get_maxQ(state)
+                actions = self.get_maxQ(state)
+                action = random.choice(actions)
  
         return action
 
@@ -152,7 +153,13 @@ class LearningAgent(Agent):
         # When learning, implement the value iteration update rule
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
         if self.learning == True:
-            self.Q[state][action] = reward
+            old_value = self.Q[state][action]
+            learning_rate = self.alpha
+            discount = 1
+            actions = self.get_maxQ(state)
+            action2 = random.choice(actions)
+            optimal_future_value = self.Q[state][action2]
+            self.Q[state][action] = old_value + learning_rate * (reward + (discount * optimal_future_value) - old_value)
 
         return
 
@@ -191,7 +198,7 @@ def run():
     #    * alpha   - continuous value for the learning rate, default is 0.5
     agent = env.create_agent(LearningAgent, 
         learning=True,
-        alpha=0.005,
+        alpha=0.5,
         epsilon=1)
     
     ##############
