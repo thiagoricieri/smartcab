@@ -44,7 +44,7 @@ class LearningAgent(Agent):
             self.epsilon = 0
             self.alpha = 0
         else:
-            self.epsilon = self.epsilon - 0.05
+            self.epsilon = self.epsilon * 0.999 # Decay of 0,1%
 
         return None
 
@@ -156,10 +156,7 @@ class LearningAgent(Agent):
             old_value = self.Q[state][action]
             learning_rate = self.alpha
             discount = 1
-            actions = self.get_maxQ(state)
-            action2 = random.choice(actions)
-            optimal_future_value = self.Q[state][action2]
-            self.Q[state][action] = old_value + learning_rate * (reward + (discount * optimal_future_value) - old_value)
+            self.Q[state][action] = old_value + learning_rate * (reward - old_value)
 
         return
 
