@@ -44,7 +44,7 @@ class LearningAgent(Agent):
             self.epsilon = 0
             self.alpha = 0
         else:
-            self.epsilon = self.epsilon * 0.999 # Decay of 0,1%
+            self.epsilon = self.epsilon * 0.9998 # Decay of 0,02%
 
         return None
 
@@ -155,7 +155,6 @@ class LearningAgent(Agent):
         if self.learning == True:
             old_value = self.Q[state][action]
             learning_rate = self.alpha
-            discount = 1
             self.Q[state][action] = old_value + learning_rate * (reward - old_value)
 
         return
@@ -212,7 +211,8 @@ def run():
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
     sim = Simulator(env,
-        update_delay=0.0001,
+        update_delay=0.00001,
+        display=False,
         log_metrics=True,
         optimized=True)
     
